@@ -1,20 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
-export default function App() {
+import React, { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+const App = () => {
+  const [position, setPosition] = useState({
+    latitude: -31.30884,
+    longitude: -54.113702,                                                                                                                                                                                                    
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <MapView
+        style={styles.map}
+        region={position}
+        onPress={(e) =>
+          setPosition({
+            ...position,
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude: e.nativeEvent.coordinate.longitude,
+            latitudeDelta: e.nativeEvent.coordinate.latitudeDelta,
+            longitudeDelta: e.nativeEvent.coordinate.longitudeDelta,
+          }) +
+          alert(
+            "Latitude:" +
+              e.nativeEvent.coordinate.latitude +
+              " \nLongitude: " +
+              e.nativeEvent.coordinate.longitude
+          )
+        }
+      >
+        <Marker
+          coordinate={position}
+          title={"Marcador"}
+          description={"Testando o marcador no mapa"}
+        />
+      </MapView>
     </View>
   );
-}
-
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  map: {
+    height: "100%",
+    width: "100%",
   },
 });
+export default App;
